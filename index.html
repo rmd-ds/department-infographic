@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Data Alignment Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#005F73]">Department Data Alignment Analysis</h1>
+            <p class="text-lg text-gray-600 mt-2">An overview of department data consistency between Employee (HONO) and Contractor (CWMS) systems.</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6 flex flex-col justify-center items-center text-center">
+                <h2 class="text-2xl font-bold text-[#005F73]">Total Departments Analyzed</h2>
+                <p class="text-7xl font-extrabold text-[#CA6702] my-4">139</p>
+                <p class="text-gray-600">This report covers all unique department entries found across both the employee and contractor master tables.</p>
+            </div>
+
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-2xl font-bold text-center text-[#005F73] mb-4">Overall Match Status Breakdown</h2>
+                <p class="text-center text-gray-600 mb-4">This chart shows the proportion of departments based on their match status. A small fraction are perfectly matched, highlighting significant data divergence.</p>
+                <div class="chart-container">
+                    <canvas id="matchStatusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-4 bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-2xl font-bold text-center text-[#005F73] mb-4">Deep Dive into Data Silos</h2>
+                <p class="text-center text-gray-600 mb-6">A large number of departments exist in only one system. The chart below compares the count of departments exclusive to the employee master (HONO) versus the contractor master (CWMS), revealing a major information gap in the HONO system.</p>
+                <div class="w-full max-w-3xl mx-auto h-96 md:h-[450px]">
+                     <canvas id="siloChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6 flex flex-col justify-center items-center text-center">
+                <h2 class="text-2xl font-bold text-[#005F73]">"Likely Match" Departments</h2>
+                 <p class="text-gray-600 mb-4">These departments have similar names and are prime candidates for manual review and consolidation.</p>
+                <p class="text-7xl font-extrabold text-[#EE9B00] my-2">27</p>
+                <p class="text-gray-600 font-semibold">Departments Requiring Manual Review</p>
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-2xl font-bold text-center text-[#005F73] mb-4">Action Plan: Path to Data Harmony</h2>
+                <p class="text-center text-gray-600 mb-6">A structured approach is needed to resolve discrepancies and ensure long-term data integrity across systems.</p>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="w-full text-center bg-[#94D2BD] text-[#005F73] font-bold p-3 rounded-lg shadow">1. Analyze & Identify Discrepancies</div>
+                    <div class="text-2xl font-bold text-[#0A9396]">↓</div>
+                    <div class="w-full text-center bg-[#E9D8A6] text-[#CA6702] font-bold p-3 rounded-lg shadow">2. Manually Review "Likely Matches"</div>
+                    <div class="text-2xl font-bold text-[#0A9396]">↓</div>
+                    <div class="w-full text-center bg-[#EE9B00] text-white font-bold p-3 rounded-lg shadow">3. Standardize & Synchronize Data</div>
+                     <div class="text-2xl font-bold text-[#0A9396]">↓</div>
+                    <div class="w-full text-center bg-[#AE2012] text-white font-bold p-3 rounded-lg shadow">4. Implement Ongoing Monitoring</div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="text-center text-sm text-gray-500 mt-10 pb-4">
+            <p>Department Data Analysis Report. Generated on Wed, Sep 17, 2025.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) {
+                return str;
+            }
+            const words = str.split(' ');
+            let lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine.length > 0) {
+                lines.push(currentLine);
+            }
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const sharedTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            }
+        };
+
+        const matchStatusData = {
+            labels: ['MATCH', 'Likely MATCH', wrapLabel('Only in Employee System (HONO)', 16), wrapLabel('Only in Contractor System (CWMS)', 16)],
+            datasets: [{
+                label: 'Department Count',
+                data: [8, 27, 73, 31],
+                backgroundColor: ['#0A9396', '#94D2BD', '#EE9B00', '#AE2012'],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+
+        const matchStatusConfig = {
+            type: 'doughnut',
+            data: matchStatusData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    ...sharedTooltipOptions.plugins,
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        new Chart(
+            document.getElementById('matchStatusChart'),
+            matchStatusConfig
+        );
+
+        const siloData = {
+            labels: ['Exclusive to Employee System (HONO)', 'Exclusive to Contractor System (CWMS)'],
+            datasets: [{
+                label: 'Number of Unique Departments',
+                data: [73, 31],
+                backgroundColor: ['#005F73', '#CA6702'],
+                borderColor: ['#005F73', '#CA6702'],
+                borderWidth: 1,
+                borderRadius: 5
+            }]
+        };
+
+        const siloConfig = {
+            type: 'bar',
+            data: siloData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                     ...sharedTooltipOptions.plugins,
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        };
+
+        new Chart(
+            document.getElementById('siloChart'),
+            siloConfig
+        );
+    </script>
+</body>
+</html>
