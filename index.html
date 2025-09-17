@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
         .chart-container {
             position: relative;
             width: 100%;
@@ -22,33 +24,58 @@
             height: 320px;
             max-height: 400px;
         }
+
         @media (min-width: 768px) {
             .chart-container {
                 height: 380px;
             }
         }
+
+        /* Added for modal scrollbar */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #0A9396;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #005F73;
+        }
     </style>
 </head>
+
 <body class="bg-gray-100 text-gray-800">
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
 
         <header class="text-center mb-10">
             <h1 class="text-4xl md:text-5xl font-extrabold text-[#005F73]">Department Data Alignment Analysis</h1>
-            <p class="text-lg text-gray-600 mt-2">An overview of department data consistency between Employee (HONO) and Contractor (CWMS) systems.</p>
+            <p class="text-lg text-gray-600 mt-2">An overview of department data consistency between Employee (HONO) and
+                Contractor (CWMS) systems.</p>
         </header>
 
         <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6 flex flex-col justify-center items-center text-center">
+
+            <div
+                class="lg:col-span-2 bg-white rounded-xl shadow-md p-6 flex flex-col justify-center items-center text-center">
                 <h2 class="text-2xl font-bold text-[#005F73]">Total Departments Analyzed</h2>
                 <p class="text-7xl font-extrabold text-[#CA6702] my-4">139</p>
-                <p class="text-gray-600">This report covers all unique department entries found across both the employee and contractor master tables.</p>
+                <p class="text-gray-600">This report covers all unique department entries found across both the employee
+                    and contractor master tables.</p>
             </div>
 
             <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
                 <h2 class="text-2xl font-bold text-center text-[#005F73] mb-4">Overall Match Status Breakdown</h2>
-                <p class="text-center text-gray-600 mb-4">This chart shows the proportion of departments based on their match status. A small fraction are perfectly matched, highlighting significant data divergence.</p>
+                <p class="text-center text-gray-600 mb-4">This chart shows the proportion of departments based on their
+                    match status. <span class="font-bold text-[#005F73]">Click on a section</span> to see the list of
+                    departments.</p>
                 <div class="chart-container">
                     <canvas id="matchStatusChart"></canvas>
                 </div>
@@ -56,30 +83,39 @@
 
             <div class="md:col-span-2 lg:col-span-4 bg-white rounded-xl shadow-md p-6">
                 <h2 class="text-2xl font-bold text-center text-[#005F73] mb-4">Deep Dive into Data Silos</h2>
-                <p class="text-center text-gray-600 mb-6">A large number of departments exist in only one system. The chart below compares the count of departments exclusive to the employee master (HONO) versus the contractor master (CWMS), revealing a major information gap in the HONO system.</p>
+                <p class="text-center text-gray-600 mb-6">A large number of departments exist in only one system. The
+                    chart below compares the count of departments exclusive to the employee master (HONO) versus the
+                    contractor master (CWMS), revealing a major information gap in the HONO system.</p>
                 <div class="w-full max-w-3xl mx-auto h-96 md:h-[450px]">
-                     <canvas id="siloChart"></canvas>
+                    <canvas id="siloChart"></canvas>
                 </div>
             </div>
 
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6 flex flex-col justify-center items-center text-center">
+            <div
+                class="lg:col-span-2 bg-white rounded-xl shadow-md p-6 flex flex-col justify-center items-center text-center">
                 <h2 class="text-2xl font-bold text-[#005F73]">"Likely Match" Departments</h2>
-                 <p class="text-gray-600 mb-4">These departments have similar names and are prime candidates for manual review and consolidation.</p>
+                <p class="text-gray-600 mb-4">These departments have similar names and are prime candidates for manual
+                    review and consolidation.</p>
                 <p class="text-7xl font-extrabold text-[#EE9B00] my-2">27</p>
                 <p class="text-gray-600 font-semibold">Departments Requiring Manual Review</p>
             </div>
 
             <div class="md:col-span-2 lg:col-span-2 bg-white rounded-xl shadow-md p-6">
                 <h2 class="text-2xl font-bold text-center text-[#005F73] mb-4">Action Plan: Path to Data Harmony</h2>
-                <p class="text-center text-gray-600 mb-6">A structured approach is needed to resolve discrepancies and ensure long-term data integrity across systems.</p>
+                <p class="text-center text-gray-600 mb-6">A structured approach is needed to resolve discrepancies and
+                    ensure long-term data integrity across systems.</p>
                 <div class="flex flex-col items-center space-y-2">
-                    <div class="w-full text-center bg-[#94D2BD] text-[#005F73] font-bold p-3 rounded-lg shadow">1. Analyze & Identify Discrepancies</div>
+                    <div class="w-full text-center bg-[#94D2BD] text-[#005F73] font-bold p-3 rounded-lg shadow">1.
+                        Analyze & Identify Discrepancies</div>
                     <div class="text-2xl font-bold text-[#0A9396]">↓</div>
-                    <div class="w-full text-center bg-[#E9D8A6] text-[#CA6702] font-bold p-3 rounded-lg shadow">2. Manually Review "Likely Matches"</div>
+                    <div class="w-full text-center bg-[#E9D8A6] text-[#CA6702] font-bold p-3 rounded-lg shadow">2.
+                        Manually Review "Likely Matches"</div>
                     <div class="text-2xl font-bold text-[#0A9396]">↓</div>
-                    <div class="w-full text-center bg-[#EE9B00] text-white font-bold p-3 rounded-lg shadow">3. Standardize & Synchronize Data</div>
-                     <div class="text-2xl font-bold text-[#0A9396]">↓</div>
-                    <div class="w-full text-center bg-[#AE2012] text-white font-bold p-3 rounded-lg shadow">4. Implement Ongoing Monitoring</div>
+                    <div class="w-full text-center bg-[#EE9B00] text-white font-bold p-3 rounded-lg shadow">3.
+                        Standardize & Synchronize Data</div>
+                    <div class="text-2xl font-bold text-[#0A9396]">↓</div>
+                    <div class="w-full text-center bg-[#AE2012] text-white font-bold p-3 rounded-lg shadow">4. Implement
+                        Ongoing Monitoring</div>
                 </div>
             </div>
 
@@ -91,7 +127,174 @@
 
     </div>
 
+    <!-- Modal Structure -->
+    <div id="departmentModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 id="modalTitle" class="text-2xl font-bold text-[#005F73]">Department List</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            </div>
+            <div class="modal-body p-6 max-h-[60vh] overflow-y-auto">
+                <ul id="departmentList" class="list-disc list-inside space-y-2 text-gray-700">
+                    <!-- Department names will be injected here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
     <script>
+        const departmentData = {
+            'MATCH': [
+                'CIVIL',
+                'ELECTRICAL',
+                'ENVIRONMENT',
+                'Logistics',
+                'MECHANICAL',
+                'Refractory',
+                'SAFETY',
+                'Security'
+            ],
+            'Likely MATCH': [
+                'Admin Ops : ADMIN',
+                'Administration : ADMIN',
+                'Administration Camp : ADMIN',
+                'Administration Fleet Management : ADMIN',
+                'Administration Food & Beverage : ADMIN',
+                'Administration PRO : ADMIN',
+                'Administration Plant : ADMIN',
+                'Administration Security : ADMIN',
+                'Administration Security : Security',
+                'Administration-Front Desk : ADMIN',
+                'Civil & Construction : CIVIL',
+                'E&I : CPP - E&I',
+                'E&I : DRI - E&I - 100 TPD',
+                'E&I : DRI - E&I - 500 TPD',
+                'E&I : DRI - RMHS E&I',
+                'Electrical & Instrumentation : ELECTRICAL',
+                'Environmental, Social & Governance (ESG) : ENVIRONMENT',
+                'Health & Safety : SAFETY',
+                'Logistics : Comml Logistics - Stores',
+                'Logistics : Comml Logistics - W/B',
+                'Mech : CPP - MECH',
+                'Mech : DRI - MECH - 100 TPD',
+                'Mech : DRI - MECH - 500 TPD',
+                'Mech : DRI - Mech - ESP',
+                'Mech : DRI - RMHS MECH',
+                'Mech : MECHANICAL',
+                'Plant Admin : ADMIN',
+            ],
+            'Only in Employee System (HONO)': [
+                'Aviation',
+                'Blast Furnace',
+                'Business & Process Excellence',
+                'Business Analytics',
+                'Business Development',
+                'CSR',
+                'Chairman Office',
+                'Coke Oven',
+                'Commercial',
+                'Communication and Instrumentation',
+                'Construction',
+                'Core Drilling',
+                'Corporate Affairs',
+                'Corporate Communication',
+                'Costing & Audit',
+                'Costing & Budgeting',
+                'DRI-Mech',
+                'Design',
+                'Director Office',
+                'ED Office',
+                'EHS',
+                'EPCC',
+                'Erection & Fabrication',
+                'Finance & Accounts',
+                'Food & Beverages',
+                'General CSR',
+                'HEMM',
+                'HSE',
+                'Healthcare',
+                'Human Resources',
+                'Information Technology',
+                'Insurance',
+                'Investment',
+                'Land Acquisition',
+                'Land Coordination',
+                'Legal',
+                'MD Office',
+                'Marketing',
+                'Medical',
+                'Mineral Processing',
+                'Mining',
+                'Operations',
+                'Operations K1-K5',
+                'Operations K6-K7',
+                'Planning',
+                'Process Control',
+                'Production',
+                'Project Monitor',
+                'Project Office',
+                'Project Procurement',
+                'Projects',
+                'Promoters',
+                'Public Relation',
+                'Quality Assurance & Quality Control',
+                'Quality Control',
+                'Quarry Production',
+                'Raw Material Handling',
+                'Raw Material Handling System',
+                'Rolling Mills',
+                'SMS',
+                'SPH',
+                'Secretarial',
+                'Sports & Fitness',
+                'Statutory & Regulatory',
+                'Steel Service Center',
+                'Strategy',
+                'Support Service',
+                'Survey',
+                'Sustainability',
+                'Teaching',
+                'Training & Development',
+                'Unit Head Office',
+                'WRM'
+            ],
+            'Only in Contractor System (CWMS)': [
+                'BRICKS',
+                'Bolt Fixing',
+                'CANTEEN',
+                'CASUAL',
+                'CPP - OPERATION',
+                'CPP O/M',
+                'CPP- DM Operation',
+                'DRI - PROCESS - 100 TPD',
+                'DRI - PROCESS - 500 TPD',
+                'DRI - Q.C.',
+                'DRI - Q.C. SAMPLE',
+                'DRI - RMHS',
+                'DRI - RMHS CKT OPR.',
+                'DRI - RMHS H.K.',
+                'DRI FABRICATION & ERECTION',
+                'DRI O/M',
+                'EQUIPMENT SUPPLIER',
+                'F&A',
+                'FABRICATION & ERECTION',
+                'FABRICATION PAINTING',
+                'HOUSE KEEPING',
+                'HR - Admin',
+                'K-6,7',
+                'MISCELLANEOUS',
+                'PAINTING',
+                'STORE',
+                'TECHNICAL',
+                'TIME OFFICE',
+                'Transport',
+                'VISITOR',
+                'WATER PIPELINE'
+            ]
+        };
+
         function wrapLabel(str, maxWidth) {
             if (str.length <= maxWidth) {
                 return str;
@@ -121,7 +324,7 @@
             }
             return label;
         };
-        
+
         const sharedTooltipOptions = {
             plugins: {
                 tooltip: {
@@ -133,7 +336,7 @@
         };
 
         const matchStatusData = {
-            labels: ['MATCH', 'Likely MATCH', wrapLabel('Only in Employee System (HONO)', 16), wrapLabel('Only in Contractor System (CWMS)', 16)],
+            labels: ['MATCH', 'Likely MATCH', 'Only in Employee System (HONO)', 'Only in Contractor System (CWMS)'],
             datasets: [{
                 label: 'Department Count',
                 data: [8, 27, 73, 31],
@@ -145,10 +348,22 @@
 
         const matchStatusConfig = {
             type: 'doughnut',
-            data: matchStatusData,
+            data: {
+                ...matchStatusData,
+                labels: matchStatusData.labels.map(l => wrapLabel(l, 16))
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const chartElement = elements[0];
+                        const index = chartElement.index;
+                        const label = matchStatusData.labels[index];
+                        const departments = departmentData[label] || [];
+                        showModal(label, departments);
+                    }
+                },
                 plugins: {
                     ...sharedTooltipOptions.plugins,
                     legend: {
@@ -163,8 +378,8 @@
                 }
             }
         };
-        
-        new Chart(
+
+        const matchStatusChart = new Chart(
             document.getElementById('matchStatusChart'),
             matchStatusConfig
         );
@@ -191,21 +406,15 @@
                 scales: {
                     x: {
                         beginAtZero: true,
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     },
                     y: {
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     }
                 },
                 plugins: {
-                     ...sharedTooltipOptions.plugins,
-                    legend: {
-                        display: false
-                    }
+                    ...sharedTooltipOptions.plugins,
+                    legend: { display: false }
                 }
             }
         };
@@ -214,6 +423,43 @@
             document.getElementById('siloChart'),
             siloConfig
         );
+
+        // Modal Logic
+        const modal = document.getElementById('departmentModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const departmentList = document.getElementById('departmentList');
+
+        function showModal(title, departments) {
+            modalTitle.textContent = title + ' Departments';
+            departmentList.innerHTML = '';
+            if (departments.length > 0) {
+                departments.forEach(dept => {
+                    const li = document.createElement('li');
+                    li.textContent = dept;
+                    departmentList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No department data available for this category.';
+                li.className = 'text-gray-500';
+                departmentList.appendChild(li);
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+
+        closeModalBtn.addEventListener('click', hideModal);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                hideModal();
+            }
+        });
+
     </script>
 </body>
+
 </html>
